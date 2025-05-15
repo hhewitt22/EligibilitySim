@@ -75,69 +75,121 @@
       margin-left: 8px;
     }
 #simFooter {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: flex-start; /* Align top edges */
 }
 
-#outcomeMetrics, #integrityScore {
-  flex: 1;
+#outcomeMetrics {
+    width: fit-content; /* Size to content (the graph) */
+    padding-right: 20px; /* Space to the right of the graph */
 }
 
-    canvas {
-      display: block;
-      border-radius: 0 0 0 10px;
-    }
-    .metrics {
-      font-size: 0.9em;
-      background: #f0f0f0;
-      padding: 10px;
-      border-radius: 6px;
-    }
-    #integrityScore {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+#outcomeGraph {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ... other CSS rules ... */
+
+#integritySection {
+    width: fit-content; /* Size to content (the score and now metrics) */
+    display: flex;
+    flex-direction: column; /* Stack integrity score and metrics vertically */
+    align-items: flex-start; /* Align items to the left within the section */
+}
+
+#historySectionContainer {
+    flex-grow: 1; /* Take up remaining space */
+    display: flex;
+    flex-direction: column;
+}
+
+#outcomeMetrics h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    width: 100%; /* Ensure heading spans the graph width */
+}
+
+#integritySection h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    width: fit-content;
+}
+
+/* NEW STYLE TO ADD */
+#integritySection > .metrics { /* Style the metrics pane within integritySection */
+    margin-top: 10px; /* Add some space above the metrics pane */
+    /* You might want to adjust other styles as needed */
+}
+
+/* ... other CSS rules ... */
+#historySectionContainer h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+/* Existing styles */
+canvas {
+    display: block;
+    border-radius: 0 0 0 10px;
+}
+
+.metrics {
+    font-size: 0.9em;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+#integrityScore {
+    font-size: 1.2em;
+    font-weight: bold;
+}
   </style>
 </head>
 <body>
-  <div id="leftPane">
-  <div id="simulation">
-    <canvas id="simCanvas" width="800" height="400"></canvas>
-  </div>
-  <div id="simFooter">
-    <div id="outcomeMetrics">
-      <h3>Applicant Outcomes</h3>
-      <canvas id="barGraph" width="300" height="200" style="background: #fff; border: 1px solid #ccc; border-radius: 6px;"></canvas>
+ <<div id="leftPane">
+    <div id="simulation">
+        <canvas id="simCanvas" width="800" height="400"></canvas>
     </div>
-    <div id="integritySection">
-      <h3>Integrity Score</h3>
-      <div id="integrityScore"></div>
+    <div id="simFooter">
+        <div id="outcomeMetrics">
+            <h3>Applicant Outcomes</h3>
+            <div id="outcomeGraph">
+                <canvas id="barGraph" width="300" height="200" style="background: #fff; border: 1px solid #ccc; border-radius: 6px;"></canvas>
+            </div>
+        </div>
+        <div id="integritySection">
+            <h3>Integrity Score</h3>
+            <div id="integrityScore"></div>
+<p>   </p>
+            <h3>Metrics</h3>
+            <div class="metrics" id="metricsPane"></div>
+        </div>
+        <div id="historySectionContainer">
+            <h3>Simulation History</h3>
+            <div id="historyPane" class="metrics"></div>
+        </div>
     </div>
-  </div>
 </div>
 
-  <div id="controls">
+<div id="controls">
     <h3> Income Assistance Eligibility Simulator</h3>
-     <p> This model simulates eligibility screening processes, allowing us to review the impact of varying configurations of screening approaches.</p>
-     <p> You can add checkpoints and modify the level of scrutiny at each checkpoint.  Be careful though - increased scrutiny comes at a cost! Looking closer means you take longer. If you get backlogged, nobody gets through.</p>
-     <p> The integrity score rates how well the configuration works - the goal is to approve as many eligible applicants as possible, and to deny as many ineligible applicants as possible. The Applicant outcomes bar graph shows a more detailed breakdown of your results - the red portions represents those applicants were denied, and the green portion represents applicants who were approved.</p>
+    <p> This model simulates eligibility screening processes, allowing us to review the impact of varying configurations of screening approaches.</p>
+    <p> You can add checkpoints and modify the level of scrutiny at each checkpoint.  Be careful though - increased scrutiny comes at a cost! Looking closer means you take longer. If you get backlogged, nobody gets through.</p>
+    <p> The integrity score rates how well the configuration works - the goal is to approve as many eligible applicants as possible, and to deny as many ineligible applicants as possible. The Applicant outcomes bar graph shows a more detailed breakdown of your results - the red portions represents those applicants were denied, and the green portion represents applicants who were approved.</p>
     <h3>Checkpoint Controls</h3>
-     <p> Add or remove checkpoints in the application process, and modify the level of scrutiny at each point.</p>
+    <p> Add or remove checkpoints in the application process, and modify the level of scrutiny at each point.</p>
     <div id="filterControls"></div>
     <button onclick="addFilter()">Add Checkpoint</button>
     <button onclick="removeFilter()">Remove Checkpoint</button>
     <button onclick="resetSim()">Reset</button>
-<button id="speedBtn" onclick="toggleSpeed()">Speed: 1x</button>
-
-
-    <h3>Metrics</h3>
-    <div class="metrics" id="metricsPane"></div>
-<h3>Simulation History</h3>
-<div id="historyPane" class="metrics"></div>
-     </div>
+    <button id="speedBtn" onclick="toggleSpeed()">Speed: 1x</button>
+</div>
   <script>
     const canvas = document.getElementById('simCanvas');
     const ctx = canvas.getContext('2d');
